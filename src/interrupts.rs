@@ -44,16 +44,19 @@ lazy_static! {
     };
 }
 
+/// Initializes the Interrupt Descriptor Table
 pub fn init_idt() {
     IDT.load();
 }
 
+/// Handles the breakpoint CPU exception
 extern "x86-interrupt" fn breakpoint_handler(
     stack_frame: &mut InterruptStackFrame)
 {
     println!("EXCEPTION: BREAKPOINT\n{:#?}", stack_frame);
 }
 
+/// Handles the double fault exception
 extern "x86-interrupt" fn double_fault_handler(
     stack_frame: &mut InterruptStackFrame, _error_code: u64)
 {
@@ -61,6 +64,7 @@ extern "x86-interrupt" fn double_fault_handler(
     hlt_loop();
 }
 
+/// Handles the timer interrupt
 extern "x86-interrupt" fn timer_interrupt_handler (
     _stack_frame: &mut InterruptStackFrame)
 {
@@ -71,6 +75,7 @@ extern "x86-interrupt" fn timer_interrupt_handler (
     }
 }
 
+/// Handles the keyboard interrupt
 extern "x86-interrupt" fn keyboard_interrupt_handler(
     _stack_frame: &mut InterruptStackFrame)
 {
@@ -84,7 +89,7 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(
     }
 
     let mut keyboard = KEYBOARD.lock();
-    let mut port = Port::new(0x60);
+    let port = Port::new(0x60);
 
     let scancode: u8 = unsafe { port.read() };
     if let Ok(Some(key_event)) = keyboard.add_byte(scancode) {

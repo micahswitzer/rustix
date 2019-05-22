@@ -12,6 +12,7 @@ pub mod gdt;
 
 use core::panic::PanicInfo;
 
+/// Initializes all subsystems necessary for this OS
 pub fn init() {
     gdt::init();
     interrupts::init_idt();
@@ -19,12 +20,14 @@ pub fn init() {
     x86_64::instructions::interrupts::enable();
 }
 
+/// Calls the halt instruction in a loop to be energy efficient
 pub fn hlt_loop() -> ! {
     loop {
         x86_64::instructions::hlt();
     }
 }
 
+/// Calls the test methods for every integration test
 pub fn test_runner(tests: &[&dyn Fn()]) {
     serial_println!("Running {} tests", tests.len());
     for test in tests {
@@ -44,8 +47,12 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
 #[cfg(test)]
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    // initialize all subsystems
     init();
+    // run the tests
     test_main();
+    // enter a halt loop
+    // we shouldn't get here if the test succeeds
     hlt_loop();
 }
 

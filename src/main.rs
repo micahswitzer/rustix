@@ -1,4 +1,3 @@
-// main.rs
 #![no_std]
 #![no_main]
 #![feature(custom_test_frameworks)]
@@ -10,18 +9,20 @@ use rustix::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    println!("Hello World{}", "!");
+    println!("Hello World!");
 
     rustix::init();
 
     #[cfg(test)]
     test_main();
 
+    // remind the haters that we didn't crash
     println!("No crashes today!");
+
+    // go to sleep
     rustix::hlt_loop();
 }
 
-/// This function is called on panic.
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {

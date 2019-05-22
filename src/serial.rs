@@ -14,6 +14,7 @@ lazy_static! {
 pub fn _print(args: ::core::fmt::Arguments) {
     use core::fmt::Write;
     use x86_64::instructions::interrupts;
+    // deadlocks are possible if we don't disable interrupts
     interrupts::without_interrupts(|| {
         SERIAL1
             .lock()
