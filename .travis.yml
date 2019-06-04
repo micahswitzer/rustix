@@ -1,0 +1,14 @@
+language: rust
+rust:
+  - nightly
+cache: cargo
+before_install: ./setup-env.sh
+install: cargo xbuild --verbose
+script:
+  - cargo xbuild --verbose
+  - cargo xtest --verbose
+addons:
+  apt:
+    update: true
+    packages:
+      - qemu
