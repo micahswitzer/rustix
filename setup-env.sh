@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 # install rust components
 RUSTUP_COMPONENTS=$(rustup component list --installed)
-[[ $RUSTUP_COMPONENTS != *rust-src* ]] &&
+if [[ $RUSTUP_COMPONENTS != *rust-src* ]]; then
 	rustup component add rust-src
-[[ $RUSTUP_COMPONENTS != *llvm-tools-preview* ]] &&
+fi;
+if [[ $RUSTUP_COMPONENTS != *llvm-tools-preview* ]]; then
 	rustup component add llvm-tools-preview
+fi;
 # install rust binaries
 RUST_BINARIES=$(cargo install --list)
-[[ $RUST_BINARIES != *cargo-xbuild* ]] &&
+if [[ $RUST_BINARIES != *cargo-xbuild* ]]; then
 	cargo install cargo-xbuild
-[[ $RUST_BINARIES != *bootimage* ]] &&
+fi;
+if [[ $RUST_BINARIES != *bootimage* ]]; then
 	cargo install bootimage
+fi;
