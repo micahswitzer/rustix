@@ -2,10 +2,10 @@
 #![no_main]
 #![feature(panic_info_message)]
 
-use core::panic::PanicInfo;
-use rustix::{serial_print, serial_println, QemuExitCode, exit_qemu};
 use core::fmt;
 use core::fmt::Write;
+use core::panic::PanicInfo;
+use rustix::{exit_qemu, serial_print, serial_println, QemuExitCode};
 
 const MESSAGE: &str = "Example panic message from panic_handler test";
 const PANIC_LINE: u32 = 16;
@@ -43,7 +43,6 @@ fn check_location(info: &PanicInfo) {
     }
 }
 
-
 struct CompareMessage {
     equals: bool,
 }
@@ -60,8 +59,7 @@ impl fmt::Write for CompareMessage {
 fn check_message(info: &PanicInfo) {
     let message = info.message().unwrap_or_else(|| fail("no message"));
     let mut compare_message = CompareMessage { equals: false };
-    write!(&mut compare_message, "{}", message)
-        .unwrap_or_else(|_| fail("write failed"));
+    write!(&mut compare_message, "{}", message).unwrap_or_else(|_| fail("write failed"));
     if !compare_message.equals {
         fail("message not equal to expected message");
     }
