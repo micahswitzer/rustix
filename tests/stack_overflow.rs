@@ -5,7 +5,7 @@
 use core::panic::PanicInfo;
 
 #[no_mangle]
-pub extern "C" fn _start () -> ! {
+pub extern "C" fn _start() -> ! {
     serial_print!("stack_overflow... ");
 
     rustix::gdt::init();
@@ -45,7 +45,7 @@ pub fn init_test_idt() {
     TEST_IDT.load();
 }
 
-use rustix::{exit_qemu, QemuExitCode, serial_println, serial_print};
+use rustix::{exit_qemu, serial_print, serial_println, QemuExitCode};
 use x86_64::structures::idt::InterruptStackFrame;
 
 extern "x86-interrupt" fn test_double_fault_handler(

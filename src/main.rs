@@ -4,7 +4,7 @@
 #![test_runner(rustix::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use bootloader::{BootInfo, entry_point};
+use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
 use rustix::println;
 use x86_64::structures::paging::Page;
@@ -19,7 +19,8 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     rustix::init();
 
     let mut mapper = unsafe { memory::init(boot_info.physical_memory_offset) };
-    let mut frame_allocator = unsafe { memory::BootInfoFrameAllocator::init(&boot_info.memory_map) };
+    let mut frame_allocator =
+        unsafe { memory::BootInfoFrameAllocator::init(&boot_info.memory_map) };
 
     let page = Page::containing_address(VirtAddr::new(0xdeadbeaf000));
     memory::create_example_mapping(page, &mut mapper, &mut frame_allocator);

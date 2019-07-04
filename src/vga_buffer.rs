@@ -1,5 +1,5 @@
-use volatile::Volatile;
 use core::fmt;
+use volatile::Volatile;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
